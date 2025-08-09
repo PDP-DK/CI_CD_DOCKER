@@ -1,21 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function LoverPage() {
+  const styles = {
+    container: {
+      width: "100vw",
+      height: "100vh",
+      background: "linear-gradient(to right, #ff758c, #ff7eb3)",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      color: "white",
+      fontFamily: "'Arial', sans-serif",
+      textAlign: "center",
+    },
+    title: {
+      fontSize: "3rem",
+      fontWeight: "bold",
+      marginBottom: "20px",
+    },
+    subtitle: {
+      fontSize: "1.5rem",
+      maxWidth: "600px",
+      lineHeight: "1.5",
+    },
+    heart: {
+      fontSize: "5rem",
+      marginTop: "20px",
+    },
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={styles.container}>
+      <div style={styles.title}>❤️ Love is in the Air ❤️</div>
+      <div style={styles.subtitle}>
+        Every moment with you is a beautiful memory I never want to forget.
       </div>
+<<<<<<< HEAD
       <h1>Enoda kutty back evalo agala iruku😘😘😘😘😘</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
@@ -28,6 +49,9 @@ function App() {
       </p>
     </>
   )
+=======
+      <div style={styles.heart}>💖</div>
+    </div>
+  );
+>>>>>>> a8061d17fb82407adf0cc1e0575aa102450a56f3
 }
-
-export default App
