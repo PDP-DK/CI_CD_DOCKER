@@ -36,22 +36,14 @@ export default function LoverPage() {
       <div style={styles.subtitle}>
         Every moment with you is a beautiful memory I never want to forget.
       </div>
-<<<<<<< HEAD
       <h1>Enoda kutty back evalo agala iruku😘😘😘😘😘</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+      
       
       </div>
       <p className="read-the-docs">
        
       </p>
-    </>
+</div>
   )
-=======
-      <div style={styles.heart}>💖</div>
-    </div>
-  );
->>>>>>> a8061d17fb82407adf0cc1e0575aa102450a56f3
 }
