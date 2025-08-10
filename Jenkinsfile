@@ -21,7 +21,7 @@ pipeline{
 
         stage('Remove image'){
             steps{
-                sh 'docker rmi $USER_NAME/$IMAGE_NAME'
+                sh 'docker rmi $USER_NAME/$IMAGE_NAME --force || true'
             }
         }
 
