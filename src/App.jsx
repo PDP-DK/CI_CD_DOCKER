@@ -36,7 +36,7 @@ export default function LoverPage() {
       <div style={styles.subtitle}>
         Every moment with you is a beautiful memory I never want to forget.
       </div>
-      <h1>Enoda kutty back evalo agala iruku😘😘😘😘😘</h1>
+      {/* <h1>Enoda kutty back evalo agala iruku😘😘😘😘😘</h1> */}
       <div className="card">
       
       
