@@ -2,7 +2,7 @@ pipleline{
     agent any
 
     environment{
-        IMAGE_NAME = "ci_cd_docker",
+        IMAGE_NAME = "ci_cd_docker"
         USER_NAME = "krish282"
     }
 
