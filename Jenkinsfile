@@ -30,6 +30,16 @@ pipeline{
                 sh 'docker build -t $USER_NAME/$IMAGE_NAME .'
             }
         }
+
+        stage('Contaier run'){
+            steps{
+                sh """
+            docker stop krish || true
+            docker rm krish || true
+            docker run -d --name krish -p 5173:5173 krish282/ci_cd_docker
+            """
+            }
+        }
         
 
     }
