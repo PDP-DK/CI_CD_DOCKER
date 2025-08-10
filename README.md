@@ -7,7 +7,7 @@ When code is pushed to GitHub, Jenkins will run tests, build a Docker image, dep
 ---
 
 ## Workflow
-
+<img width="1192" height="343" alt="image" src="https://github.com/user-attachments/assets/1fe7610f-7789-4602-83ac-2008337278f3" />
 1. Code is pushed to GitHub, triggering a webhook to Jenkins.
 2. Jenkins runs the pipeline:
    - Clones the repository.
