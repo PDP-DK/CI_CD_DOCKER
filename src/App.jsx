@@ -2,16 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 
 export default function PipelineVisualizer() {
   const stages = [
-    { id: 1, name: 'Checkout', emoji: '📥' },
-    { id: 2, name: 'Build', emoji: '🛠️' },
-    { id: 3, name: 'Test', emoji: '🧪' },
-    { id: 4, name: 'Push', emoji: '📤' },
-    { id: 5, name: 'Deploy', emoji: '🚀' }
+    { id: 1, name: 'Clone', emoji: '📥' },
+    { id: 2, name: 'Test', emoji: '🧪' },
+    { id: 3, name: 'Remove image', emoji: '🗑️' },
+    { id: 4, name: 'Image Build', emoji: '🛠️' },
+    { id: 5, name: 'Container run', emoji: '🐳' },
+    { id: 6, name: 'Push image', emoji: '📤' }
   ];
 
   const [active, setActive] = useState(0);
   const [running, setRunning] = useState(true);
-  const [speed, setSpeed] = useState(1200); // ms per stage
+  const [speed, setSpeed] = useState(1200);
   const timerRef = useRef(null);
 
   useEffect(() => {
@@ -53,7 +54,6 @@ export default function PipelineVisualizer() {
     setActive(i);
   }
 
-  // Inline styles (one place so it's easy to tweak)
   const styles = {
     page: {
       height: '100vh',
@@ -71,7 +71,7 @@ export default function PipelineVisualizer() {
     title: { fontSize: 28, marginBottom: 12, fontWeight: 700, textShadow: '0 6px 18px rgba(0,0,0,0.6)' },
     subtitle: { fontSize: 13, color: 'rgba(230,247,255,0.8)', marginBottom: 28 },
     stageArea: { position: 'relative', width: '100%', maxWidth: 1100, height: 340, display: 'flex', alignItems: 'center', justifyContent: 'center' },
-    stageCard: base => ({
+    stageCard: () => ({
       position: 'absolute',
       width: 280,
       height: 220,
@@ -108,22 +108,16 @@ export default function PipelineVisualizer() {
     <div style={styles.page}>
       <div style={{ textAlign: 'center' }}>
         <div style={styles.title}>Jenkins Pipeline — Animated Stages</div>
-        <div style={styles.subtitle}>Stages will animate one-by-one. Click any card to jump. Use controls to play/pause or restart.</div>
+        <div style={styles.subtitle}>Stages from Jenkinsfile run one-by-one. Click any card to jump, or control playback.</div>
       </div>
 
       <div style={styles.stageArea}>
         {stages.map((s, i) => {
-          // compute visual state relative to active
           const delta = i - active;
-
-          // base card style
           const base = styles.stageCard();
-
-          // position & transform depending on delta
           let style = { ...base };
 
           if (delta < -1) {
-            // far left (completed)
             style.transform = 'translateX(-420px) scale(0.8) rotate(-6deg)';
             style.opacity = 0.5;
             style.filter = 'grayscale(0.1)';
@@ -133,7 +127,6 @@ export default function PipelineVisualizer() {
             style.opacity = 0.7;
             style.zIndex = 20 + i;
           } else if (delta === 0) {
-            // active center
             style.transform = 'translateX(0px) scale(1)';
             style.opacity = 1;
             style.boxShadow = '0 30px 80px rgba(3,102,214,0.28)';
@@ -149,12 +142,7 @@ export default function PipelineVisualizer() {
           }
 
           return (
-            <div
-              key={s.id}
-              onClick={() => jumpTo(i)}
-              style={style}
-              aria-hidden={false}
-            >
+            <div key={s.id} onClick={() => jumpTo(i)} style={style}>
               <div style={styles.emoji}>{s.emoji}</div>
               <div style={{ fontSize: 22, fontWeight: 800 }}>{s.name}</div>
               <div style={styles.smallLabel}>{i === active ? 'Running' : i < active ? 'Done' : 'Pending'}</div>
@@ -169,9 +157,10 @@ export default function PipelineVisualizer() {
         </div>
 
         <div style={styles.controls}>
-          <button onClick={() => (running ? stopAuto() : startAuto())} style={styles.btn(true)}>{running ? 'Pause' : 'Play'}</button>
+          <button onClick={() => (running ? stopAuto() : startAuto())} style={styles.btn(true)}>
+            {running ? 'Pause' : 'Play'}
+          </button>
           <button onClick={restart} style={styles.btn(false)}>Restart</button>
-
           <label style={{ marginLeft: 12, color: '#dff6ff', fontWeight: 700 }}>Speed</label>
           <input
             type="range"
@@ -181,7 +170,6 @@ export default function PipelineVisualizer() {
             onChange={e => setSpeed(Number(e.target.value))}
             style={{ marginLeft: 8 }}
           />
-
           <div style={{ marginLeft: 12, color: '#cfeffd', fontWeight: 700 }}>{Math.round(speed)} ms</div>
         </div>
       </div>
