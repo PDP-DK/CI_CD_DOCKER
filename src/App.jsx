@@ -6,8 +6,7 @@ export default function PipelineVisualizer() {
     { id: 2, name: 'Test', emoji: '🧪' },
     { id: 3, name: 'Remove image', emoji: '🗑️' },
     { id: 4, name: 'Image Build', emoji: '🛠️' },
-    { id: 5, name: 'Container run', emoji: '🐳' },
-    { id: 6, name: 'Push image', emoji: '📤' }
+    { id: 5, name: 'Container run', emoji: '🐳' }
   ];
 
   const [active, setActive] = useState(0);

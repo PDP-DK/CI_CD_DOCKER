@@ -40,12 +40,6 @@ pipeline{
             """
             }
         }
-
-        stage('Push image'){
-            steps{
-                sh 'docker push krish282/ci_cd_docker'
-            }
-        }
         
 
     }
