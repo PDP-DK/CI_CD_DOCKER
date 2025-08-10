@@ -36,6 +36,7 @@ export default function LoverPage() {
       <div style={styles.subtitle}>
         Every moment with you is a beautiful memory I never want to forget.
       </div>
+      <p>Testing Jenkins file pipeline : 1</p>
       {/* <h1>Enoda kutty back evalo agala iruku😘😘😘😘😘</h1> */}
       <div className="card">
       
