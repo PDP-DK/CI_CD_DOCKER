@@ -19,6 +19,12 @@ pipeline{
             }
         }
 
+        stage('Remove image'){
+            steps{
+                sh 'docker rmi $(docker ps -q | head -n 1)'
+            }
+        }
+
         stage('Image Build'){
             steps{
                 sh 'docker build -t $USER_NAME/$IMAGE_NAME .'
