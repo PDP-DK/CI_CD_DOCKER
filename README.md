@@ -159,6 +159,7 @@ Once the pipeline has run successfully, you can access the React app in your bro
 ```
 http://<EC2-IP>:5173
 ```
+<img width="1396" height="842" alt="image" src="https://github.com/user-attachments/assets/73089e34-fee4-477e-8508-1fe252b89198" />
 
 ---
 
