@@ -21,7 +21,7 @@ pipeline{
 
         stage('Remove image'){
             steps{
-                sh 'docker rmi $(docker ps -q | head -n 1)'
+                sh 'docker rmi $(docker ps --format "{{.Image}}" | grep krish)'
             }
         }
 
