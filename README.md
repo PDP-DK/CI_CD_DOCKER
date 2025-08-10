@@ -1,67 +1,165 @@
-# Simple CI/CD Project with Jenkins & Docker
+# CI/CD Pipeline with Jenkins, Docker and React
 
-A basic setup showing how to automatically build and deploy a Node.js app using Jenkins, Docker, and GitHub.
+This project demonstrates a fully automated CI/CD pipeline using Jenkins, Docker, and GitHub to deploy a React application.
 
-## What This Does
-
-- When you push code to GitHub → Jenkins automatically builds and runs your app
-- Everything runs in Docker containers on AWS
-- No manual work needed after setup!
-
-## Tech Stack
-
-- **Node.js** - The app
-- **Docker** - Runs the app in containers
-- **Jenkins** - Automates everything
-- **GitHub** - Stores your code
-- **AWS EC2** - Where it all runs
-
-## The Magic Script
-
-This runs in Jenkins whenever you push code:
-
-```bash
-docker rm krish --force
-docker rmi $(docker images -q | head -n 1)
-docker build -t krish282/ci_cd_docker .
-docker run -d --name krish -p 5173:5173 krish282/ci_cd_docker
-```
-
-## What Each Line Does
-
-1. `docker rm krish --force` - Removes old container
-2. `docker rmi $(docker images -q | head -n 1)` - Removes old image
-3. `docker build -t krish282/ci_cd_docker .` - Builds new image
-4. `docker run -d --name krish -p 5173:5173 krish282/ci_cd_docker` - Runs new container
-
-## How It Works
-
-1. You push code to GitHub
-2. GitHub tells Jenkins "Hey, new code!"
-3. Jenkins runs the script above
-4. Your app is live at `http://your-server:5173`
-
-## Quick Setup
-
-1. **AWS EC2**: Install Docker and Jenkins
-2. **Jenkins**: Create job, add the script above
-3. **GitHub**: Add webhook to your repo pointing to Jenkins
-4. **Done!** Push code and watch it deploy automatically
-
-## Files You Need
-
-- `Dockerfile` - Tells Docker how to build your app
-- `package.json` - Your Node.js app details
-- Your app code
-
-## Access Your App
-
-After setup, visit: `http://your-ec2-ip:5173`
-
-## That's It!
-
-Push code → Jenkins builds → App updates automatically. Simple as that! 🚀
+When code is pushed to GitHub, Jenkins will run tests, build a Docker image, deploy the container, and push the image to Docker Hub automatically.
 
 ---
 
-**Tip**: Replace `your-ec2-ip` with your actual server IP address.
+## Workflow
+
+1. Code is pushed to GitHub, triggering a webhook to Jenkins.
+2. Jenkins runs the pipeline:
+   - Clones the repository.
+   - Runs project tests.
+   - Removes the old Docker image.
+   - Builds a new Docker image.
+   - Stops and removes the old container.
+   - Runs the new container.
+   - Pushes the image to Docker Hub.
+
+---
+
+## Technologies Used
+
+- React.js – Frontend application  
+- Node.js – Runtime environment  
+- Docker – Containerization  
+- Jenkins – CI/CD automation  
+- GitHub – Source code management  
+- AWS EC2 – Hosting environment  
+
+---
+
+## Jenkinsfile
+
+```groovy
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "ci_cd_docker"
+        USER_NAME = "krish282"
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/PDP-DK/CI_CD_DOCKER.git'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'npm run test || true'
+            }
+        }
+
+        stage('Remove image') {
+            steps {
+                sh 'docker rmi $USER_NAME/$IMAGE_NAME --force || true'
+            }
+        }
+
+        stage('Image Build') {
+            steps {
+                sh 'docker build -t $USER_NAME/$IMAGE_NAME .'
+            }
+        }
+
+        stage('Container run') {
+            steps {
+                sh """
+                    docker stop krish || true
+                    docker rm krish || true
+                    docker run -d --name krish -p 5173:5173 $USER_NAME/$IMAGE_NAME
+                """
+            }
+        }
+
+        stage('Push image') {
+            steps {
+                sh 'docker push $USER_NAME/$IMAGE_NAME'
+            }
+        }
+    }
+}
+```
+
+---
+
+## Stage Descriptions
+
+1. **Clone** – Pulls the latest code from GitHub.  
+2. **Test** – Runs any available project tests (pipeline continues even if tests fail).  
+3. **Remove image** – Deletes any existing Docker image for a clean build.  
+4. **Image Build** – Creates a new Docker image from the application code.  
+5. **Container run** – Stops and removes the existing container, then runs the new one.  
+6. **Push image** – Uploads the latest image to Docker Hub.
+
+---
+
+## Example Deployment Commands
+
+```bash
+# Stop and remove old container
+docker stop krish || true
+docker rm krish || true
+
+# Remove old image
+docker rmi krish282/ci_cd_docker --force || true
+
+# Build new image
+docker build -t krish282/ci_cd_docker .
+
+# Run new container
+docker run -d --name krish -p 5173:5173 krish282/ci_cd_docker
+
+# Push image to Docker Hub
+docker push krish282/ci_cd_docker
+```
+
+---
+
+## Setup Instructions
+
+### 1. Configure AWS EC2
+```bash
+sudo apt update && sudo apt install docker.io -y
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+
+# Install Jenkins
+sudo apt install openjdk-17-jdk -y
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update && sudo apt install jenkins -y
+```
+
+---
+
+### 2. Configure Jenkins
+- Create a new Pipeline job.
+- Add the Jenkinsfile from above.
+- Set up a GitHub webhook for automatic builds.
+
+---
+
+### 3. Configure GitHub
+- In your repository, go to **Settings → Webhooks**.
+- Add a new webhook with the URL:
+```
+http://<EC2-IP>:8080/github-webhook/
+```
+
+---
+
+## Accessing the Application
+Once the pipeline has run successfully, you can access the React app in your browser at:
+```
+http://<EC2-IP>:5173
+```
+
+---
+
+This setup ensures that every code push is automatically tested, built, deployed, and published as a Docker image without manual intervention.
